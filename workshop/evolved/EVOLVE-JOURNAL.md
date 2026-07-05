@@ -63,8 +63,28 @@ Config: `workshop/evolved/harness_config_evolved.yaml` = hardened config + this 
 Compare `runs/evolved2/` reward + traces vs `runs/r1_evolved_32b_jinja/`. Keep only if it improves
 or the trace shows the target failures (incomplete gathering, wrong variant) resolved.
 
-## Result
-_[filled after the eval run — reward + whether the reminder changed the gather/variant behavior.]_
+## Result (3-way, qwen3:32b, same 3 retail tasks)
+
+| Config | avg_reward | trace signal |
+|--------|------------|--------------|
+| vanilla (2 procs) | 0.000 | F1: empty-msg abort, never writes |
+| hardened (7 procs) | 0.000 | F1 cleared — reaches + executes the write |
+| **+ RetailExchangeGuide** | **0.000** | processor **fired** (reminder present in session JSONL); pushed behavior further |
+
+**No reward lift, but the lever worked as designed.** Confirmed firing: `RETAIL EXCHANGE DISCIPLINE`
+found in `runs/r2_evolved2_32b/R0/sessions/.../*.jsonl`. Behavioral change vs hardened:
+- **task 1**: hardened `executed_actions: []` → +guide gathers (`get_product_details`, `get_order_details`)
+  and executes `exchange_delivered_order_items`. The reminder pushed gather+write as intended.
+- **task 0**: hit `infrastructure_error` this run (server timeout) → did nothing = **noise**, not comparable.
+- **task 2**: 11-action multi-item *return*; agent floundered → `transfer_to_human_agents` = **capability** gap.
+
+**Why the metric didn't move (the lesson):** binary reward on **3 tasks × 1 trial** is too noisy/coarse;
+confounds = weak **8B user-simulator** (paper used GPT-4.1/GPT-5) + **Q4-quantized** 32B. This is exactly
+why the paper uses 100+ tasks, pass@k, multiple trials, and a strong user-sim. The **method** reproduces
+(diagnose→lever→author→validate→measure); the **headline number** does not, on a laptop, at this scale.
+
+**Next to get a number**: scale to ~15–20 tasks × ≥2 trials and/or a 32B user-sim; expect the trace-level
+gains (survive-abort, gather+write) to surface as a small but real % over vanilla.
 
 ## Reproduce
 1. Servers: `./serve-local.sh llama <qwen3-32b-blob> 8090 2` and `... <qwen3-8b-blob> 8088 3` (both `--jinja`).
