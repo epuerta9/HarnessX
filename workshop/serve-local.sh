@@ -25,9 +25,15 @@ case "$MODE" in
   llama)
     BLOB="${2:?path to GGUF blob required}"
     PORT="${3:-8088}"
-    echo "Starting keyless llama-server on :$PORT for $BLOB"
+    SLOTS="${4:-2}"
+    # --jinja is REQUIRED for tool-calling: it uses the model's embedded chat
+    # template so qwen3 emits structured tool_calls. WITHOUT it the model writes
+    # tool calls as JSON prose in content, tools never execute, and rewards
+    # silently go to 0. Size -c so each of N slots gets >= ~12k tokens (tau2
+    # retail system prompts are large; 4k/slot overflows).
+    echo "Starting keyless llama-server on :$PORT for $BLOB (--jinja, $SLOTS slots)"
     exec llama-server -m "$BLOB" --host 127.0.0.1 --port "$PORT" \
-      -c 8192 --chat-template chatml -ngl 99
+      -c $((SLOTS * 14336)) -np "$SLOTS" --jinja -ngl 99
     ;;
   *)
     echo "unknown mode: $MODE (use 'ollama' or 'llama')" >&2; exit 1

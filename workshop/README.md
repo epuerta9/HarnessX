@@ -84,6 +84,16 @@ unset LLAMA_API_KEY          # then restart the server
 # For the Ollama GUI app: killall Ollama; launchctl unsetenv LLAMA_API_KEY; open -a Ollama
 ```
 
+**Reward is 0.00 on every task and the agent "talks" instead of acting.**
+Tool-calling isn't wired. With standalone `llama-server` you MUST pass **`--jinja`** (use the model's
+embedded chat template) — otherwise qwen3 emits tool calls as JSON prose in the message content,
+tau2 never executes them, and the (weak) user-simulator hallucinates the results. Symptom in a
+trajectory: assistant messages like `{ "action": "tool_call", "tool": "..." }` as text, followed by
+a user turn that invents the tool's output. `serve-local.sh` sets `--jinja` for you.
+
+**`request exceeds available context size`.** Per-slot context is too small for τ²'s large system
+prompts. Size `-c` so each of `-np N` slots gets ≥ ~12k tokens (e.g. `-c 28672 -np 2`).
+
 **Ollama unavailable / broken.** Use the standalone fallback on the model blobs:
 ```bash
 ./serve-local.sh llama ~/.ollama/models/blobs/sha256-<qwen3-8b-blob> 8088
