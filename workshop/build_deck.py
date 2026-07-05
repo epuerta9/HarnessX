@@ -124,6 +124,19 @@ content("The punchline: code beats prompts",
      ("Prompt edits: local, brittle, don't transfer across models.", "b"),
      ("Code fixes: structural, portable, testable, versionable.", "b")])
 
+content("But it's not only code — 4 levers",
+    [("The evolver edits the whole harness, not just processors:", "h"),
+     ("Instruction = prompts / guidance    ·    Action = tools / skills", "b"),
+     ("Control = deterministic processors    ·    Configuration = memory, compaction, knobs", "b"),
+     ("Which lever wins depends on your model + your vertical's bottleneck:", "h"),
+     ("strong model → prompts   ·   weak model → control code   ·   long-context → memory/compaction   ·   retrieval → tools", "b")])
+
+content("So: evolve the dimension your vertical is bottlenecked on",
+    [("“Prompt dominance scales inversely with base-model strength.” — HarnessX paper", "q"),
+     ("Legal / retail reliability (frozen/weak model) → deterministic code dominates.", "b"),
+     ("LoCoMo long-context → memory + compaction. GAIA retrieval → tools. Sonnet → prompts.", "b"),
+     ("This is the stronger thesis: not just a vertical-specific harness — the vertical-specific LEVER.", "h")])
+
 content("Inverse scaling",
     [("The weakest model gains the most.", "h"),
      ("ALFWorld Qwen3.5-9B: 53 → 97 (+44)   vs   Sonnet: 83.6 → 94.8 (+11.2)", "b"),
