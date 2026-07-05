@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 """Reproducible check for the authored RetailExchangeGuide component.
 
-Run:  cd <repo root> && python workshop/evolved/verify_component.py
+Run:  python workshop/evolved/verify_component.py     (from anywhere)
 Proves the IRMA processor fires on exchange/return intent, stays silent
 otherwise, and prepends the reminder without dropping the base system prompt.
 """
+import sys
+from pathlib import Path
+
+# repo root = two levels up (workshop/evolved/ -> repo root); ensure importable.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
 from benchmarks.tau2.retail_exchange_guide import _has_exchange_intent, _REMINDER
 
 
