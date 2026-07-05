@@ -170,6 +170,14 @@ content("An honest note on reproducing the *number*",
      ("Small samples are noisy — one task hit an infra timeout; the paper uses 100+ tasks, pass^k, trials.", "b"),
      ("Reference at scale (27B retail): 0.807 → 0.965. Our local telecom: 0.50 → 0.75.", "b")])
 
+content("How this workshop runs — you drive it",
+    [("Not slide-watching. You run the loop on your laptop.", "h"),
+     ("1. Run the vanilla baseline → watch a frozen model FAIL a real benchmark task.", "b"),
+     ("2. Read the trace frontmatter → feel it's a harness failure, not a reasoning one.", "b"),
+     ("3. Invoke the harness-evolver skill → YOUR Claude Code diagnoses + authors a fix.", "b"),
+     ("4. make eval → see the number move. Loop until it lifts.", "b"),
+     ("A reference solution is shipped — but try your own lever first.", "h")])
+
 content("The meta-agent is YOU (Claude Code)",
     [("evolve() = an agent that reads traces and writes config. We used Claude Code directly.", "h"),
      ("read failure trajectories → diagnose the pattern → author a processor → re-eval → keep if it gates", "b"),

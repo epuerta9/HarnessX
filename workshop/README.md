@@ -10,6 +10,10 @@
 Everything runs locally via **`uv`** + a local OpenAI-compatible inference server. No GPU cluster,
 no model training — the model weights never change; only the `HarnessConfig` evolves.
 
+> **👉 Doing the workshop? Start with [`HANDS-ON.md`](HANDS-ON.md)** — the experiential lab where *you*
+> run the baseline, feel it fail in the trace, and let *your own* Claude Code evolve the harness. This
+> README is the reference; HANDS-ON is the journey.
+
 ---
 
 ## What you'll see
