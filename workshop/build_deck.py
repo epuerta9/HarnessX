@@ -218,6 +218,14 @@ image_slide("Which lever moved the number",
             "workshop/lever-result-chart.png",
             "Same frozen model. The lever lifts the score only when the benchmark gives a signal AND the failure matches the lever.")
 
+content("Which component makes the biggest difference?",
+    [("Ablation: run vanilla / control-only / IRMA-only / full on the SAME tasks.", "h"),
+     ("Single-trial trap: variance (±0.25) is as big as the effect — the same config scores 0.50 OR 0.75 by luck.", "b"),
+     ("So you CANNOT rank components from one run. Attribution is statistical, not anecdotal.", "b"),
+     ("Fix: multiple trials (pass^k) + task-level check + leave-one-out to kill inert processors.", "b"),
+     ("Task-level signal: IRMA's roaming alert rescues the roaming task; control processors are inert here.", "h"),
+     ("Reproducible in one command:  bash workshop/ablate.sh", "b")])
+
 content("Did we prove the paper? (partly — yes)",
     [("✓ A FROZEN model's benchmark score rose via a harness edit alone (telecom 0.50 → 0.75).", "b"),
      ("✓ The moat is the infrastructure — we diagnosed + evolved purely off typed processors + structured traces.", "b"),

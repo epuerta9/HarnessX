@@ -105,6 +105,18 @@ Full worked rationale: `evolved/EVOLVE-JOURNAL.md`. Method + trace-reading: the 
 
 ---
 
+## 6. (Advanced) Which component actually made the difference?
+
+Once you have a lift, attribute it. **Don't trust a single run** — rollout noise (±0.25 here) is as big as
+the effect. Run the multi-trial ablation:
+```bash
+DOMAIN=telecom TASKS=4 TRIALS=3 bash workshop/ablate.sh
+```
+It runs `vanilla / control-only / IRMA-only / full` each `TRIALS` times and prints a per-component
+attribution table (avg + marginal Δ vs vanilla). The **larger marginal** is the component doing the work;
+components with ~0 marginal are **inert — don't ship them** (leave-one-out). Attribution is statistical:
+that's why the paper uses pass^k and 100+ tasks. Reproducible for anyone with the servers up.
+
 ## What you should walk away having *felt*
 1. A frozen model's realized score is mostly **I/O discipline the scaffold guarantees** — you saw it fail,
    then saw a harness edit (no weight change) fix it.
