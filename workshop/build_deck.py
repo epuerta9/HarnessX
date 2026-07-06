@@ -65,6 +65,25 @@ def content(title, items, sub=None):
             para(body, "•  " + txt, 18, INK, first=(i==0), space=10)
     return s
 
+def image_slide(title, img_path, caption=None):
+    import os
+    s = prs.slides.add_slide(BLANK); bg(s, PAPER)
+    tf = box(s, 0.9, 0.55, 11.5, 1.0)
+    para(tf, title, 30, INK, bold=True, first=True)
+    if os.path.exists(img_path):
+        from PIL import Image
+        try:
+            iw, ih = Image.open(img_path).size; ar = ih / iw
+        except Exception:
+            ar = 0.4
+        w = Inches(10.6); h = Inches(10.6 * ar)
+        left = (SW - w) / 2
+        s.shapes.add_picture(img_path, left, Inches(1.9), width=w, height=h)
+    if caption:
+        cf = box(s, 0.9, 6.7, 11.5, 0.6)
+        para(cf, caption, 13, MUTE, first=True, align=PP_ALIGN.CENTER)
+    return s
+
 # ── Slide 1: title ────────────────────────────────────────────────────────────
 s = prs.slides.add_slide(BLANK); bg(s, INK)
 tf = box(s, 1.0, 2.5, 11.3, 2.6)
@@ -188,15 +207,34 @@ content("Reproduce it",
      ("Gotcha we hit: LLAMA_API_KEY in your shell 401s all local inference — unset it.", "b"),
      ("Fork: github.com/epuerta9/HarnessX  (branch workshop/harness-evolution)", "b")])
 
+content("Harness evolution IS reinforcement learning",
+    [("The “operational mirror” — with the model FROZEN:", "h"),
+     ("State = the HarnessConfig   ·   Action = pull one of the 4 levers", "b"),
+     ("Policy = a stronger model reading the traces (that's Claude Code)", "b"),
+     ("Reward = the benchmark score   ·   Rollout = re-run the task set   ·   Gate = keep if reward↑", "b"),
+     ("Agentic RL = use a stronger model to read traces, pick the lever, re-run, keep what improves.", "h")])
+
+image_slide("Which lever moved the number",
+            "workshop/lever-result-chart.png",
+            "Same frozen model. The lever lifts the score only when the benchmark gives a signal AND the failure matches the lever.")
+
+content("Did we prove the paper? (partly — yes)",
+    [("✓ A FROZEN model's benchmark score rose via a harness edit alone (telecom 0.50 → 0.75).", "b"),
+     ("✓ The moat is the infrastructure — we diagnosed + evolved purely off typed processors + structured traces.", "b"),
+     ("✓ Lever mix is context-dependent — IRMA worked on telecom, did nothing on retail (grading mismatch).", "b"),
+     ("✓ Ceiling/floor effects — 32B at ceiling on easy tasks; strict retail grading = effective floor.", "b"),
+     ("Not reproduced (needs scale): +14.5% magnitudes, multi-round + the 3 RL pathologies, AEGIS, co-evolution.", "h")])
+
 # ── closing takeaways ─────────────────────────────────────────────────────────
 s = prs.slides.add_slide(BLANK); bg(s, INK)
 tf = box(s, 0.9, 0.7, 11.5, 1.0); para(tf, "Takeaways", 36, WHITE, bold=True, first=True)
 body = box(s, 0.95, 2.0, 11.5, 5.0)
-tks = ["The harness, not just the model, determines agent performance.",
-       "Vertical-specific → evolve (or design) a vertical-specific harness.",
-       "The wins are mostly deterministic code — testable, portable, versionable.",
-       "Own your harness components: optimization tracks business-need drift.",
-       "Weakest models gain most — harness evolution is how small models punch up."]
+tks = ["The harness, not just the model, determines REALIZED agent performance.",
+       "We improved a frozen model's benchmark score by evolving the harness alone (0.50 → 0.75).",
+       "Vertical agents need a STRONG BENCHMARK to evolve against — it's the reward signal.",
+       "Off-the-shelf model + off-the-shelf harness plateaus: nothing tells you which lever to move.",
+       "Agentic RL: a stronger model reads traces → picks the lever → re-runs → keeps what improves.",
+       "This is how you squeeze a cheap, frozen model to punch up on YOUR problem."]
 for i, t in enumerate(tks):
     para(body, f"{i+1}.  {t}", 20, WHITE if i%2 else GREEN, bold=(i==0), first=(i==0), space=16)
 
