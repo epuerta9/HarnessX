@@ -226,6 +226,10 @@ content("Which component makes the biggest difference?",
      ("Task-level signal: IRMA's roaming alert rescues the roaming task; control processors are inert here.", "h"),
      ("Reproducible in one command:  bash workshop/ablate.sh", "b")])
 
+image_slide("Attribution (3 trials): one component did the work",
+            "workshop/attribution-chart.png",
+            "Multi-trial averaging clears the noise: IRMA (+0.167) drives the lift; the 5 control processors are inert (−0.083). Leave-one-out would drop them.")
+
 content("Did we prove the paper? (partly — yes)",
     [("✓ A FROZEN model's benchmark score rose via a harness edit alone (telecom 0.50 → 0.75).", "b"),
      ("✓ The moat is the infrastructure — we diagnosed + evolved purely off typed processors + structured traces.", "b"),
