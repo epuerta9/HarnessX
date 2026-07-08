@@ -237,6 +237,17 @@ content("Did we prove the paper? (partly — yes)",
      ("✓ Ceiling/floor effects — 32B at ceiling on easy tasks; strict retail grading = effective floor.", "b"),
      ("Not reproduced (needs scale): +14.5% magnitudes, multi-round + the 3 RL pathologies, AEGIS, co-evolution.", "h")])
 
+content("Crutch or capability? Two value props",
+    [("Deterministic Control fixes (roaming alert, ParseRetry) are a CRUTCH — they recover latent", "b"),
+     ("capability a frozen model failed to apply. Real, but capped at the model's ceiling.", "b"),
+     ("Instruction (reasoning scaffolds) + Action (tools/skills) ADD realized capability — not plumbing.", "h"),
+     ("To raise the ceiling itself, you need loop 2: RL on the weights (co-evolution). Different game.", "b"),
+     ("On a frozen model, the most capability-like levers are reasoning scaffolds + new tools.", "h")])
+
+image_slide("The harness elicits latent reasoning (GSM8K)",
+            "workshop/reasoning/reasoning-chart.png",
+            "Same frozen qwen3:8B. A reflect scaffold (re-derive + self-check) lifts GSM8K 0.65 → 0.97 and CRT 0.53 → 0.73. Realized reasoning, not I/O.")
+
 # ── closing takeaways ─────────────────────────────────────────────────────────
 s = prs.slides.add_slide(BLANK); bg(s, INK)
 tf = box(s, 0.9, 0.7, 11.5, 1.0); para(tf, "Takeaways", 36, WHITE, bold=True, first=True)

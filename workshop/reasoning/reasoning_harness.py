@@ -81,12 +81,15 @@ def run_vanilla(p, api_base, model):
 def run_reflect(p, api_base, model):
     first = call(api_base, model, [{"role": "user", "content":
              "/no_think\nSolve this problem. Reply with ONLY the final number.\n\n" + p["q"]}], max_tokens=200)
+    # revise pass: /no_think keeps the reasoning VISIBLE (not in a hidden <think>
+    # block that would eat the token budget) so the re-derivation is parseable.
     rev = call(api_base, model, [{"role": "user", "content":
-             ("A student was asked this problem and gave the answer below. Re-derive the solution "
-              "carefully, step by step. Check the student's answer for mistakes (watch for intuitive "
-              "traps). Then give the corrected final answer.\n\n"
+             ("/no_think\n"
+              "A student was asked this problem and gave the answer below. Re-derive the solution "
+              "carefully, showing your work step by step. Check the student's answer for mistakes "
+              "(watch for intuitive traps and arithmetic slips). Then give the corrected final answer.\n\n"
               f"PROBLEM: {p['q']}\n\nSTUDENT ANSWER: {first.strip()}\n\n"
-              "End your reply with a line: 'Answer: <number>'.")}], max_tokens=1200)
+              "End with exactly one line: 'Answer: <number>'.")}], max_tokens=900)
     return extract(rev)
 
 
