@@ -183,6 +183,14 @@ content("Why telecom worked where retail didn't",
      ("Not at ceiling: 32B solves easy tasks (1.0), fails user_abroad (0.0) — room for the harness.", "b"),
      ("A weaker 8B agent would show a BIGGER gap — inverse scaling.", "b")])
 
+content("Designing the vertical benchmark is HALF the work",
+    [("The benchmark IS the reward function for agentic RL. No signal → no evolution.", "h"),
+     ("A benchmark you can evolve against needs:", "b"),
+     ("  · a non-zero baseline (model not floored)   · room (not at ceiling)", "b"),
+     ("  · a failure mode that matches a lever   · grading that gives a gradient (partial credit / enough tasks)", "b"),
+     ("Retail (strict DB) → 0.00 dead end.  Telecom (lenient) → moves.  GSM8K → clean gradient.", "b"),
+     ("Vertical agents need vertical benchmarks — co-design the harness AND the benchmark together.", "h")])
+
 content("An honest note on reproducing the *number*",
     [("The METHOD reproduces on a laptop: diagnose trace → pick lever → author component → measure.", "h"),
      ("The benchmark + grading choice matters: pick a domain where the model has a non-zero baseline.", "b"),
@@ -247,6 +255,17 @@ content("Crutch or capability? Two value props",
 image_slide("The harness elicits latent reasoning (GSM8K)",
             "workshop/reasoning/reasoning-chart.png",
             "Same frozen qwen3:8B. A reflect scaffold (re-derive + self-check) lifts GSM8K 0.65 → 0.97 and CRT 0.53 → 0.73. Realized reasoning, not I/O.")
+
+image_slide("The spectrum of harness value (all 3 levers, real numbers)",
+            "workshop/levers-spectrum-chart.png",
+            "Action ADDS capability (private KB 0.00 → 1.00, can't → can). Instruction reshapes reasoning (GSM8K 0.65 → 0.97). Control recovers latent (telecom 0.50 → 0.75, a crutch). Same frozen model throughout.")
+
+content("The Action lever — genuine capability (can't → can)",
+    [("A frozen model CANNOT know your private data — it's not in the weights.", "h"),
+     ("Vanilla on a private company KB: 0/12 — every fact hallucinated (Sentinel Arm → $12,500, not $8,450).", "b"),
+     ("Add a kb_search tool (Action lever): 12/12 — it retrieves the fact and answers.", "b"),
+     ("That's NEW capability, not a crutch — and it's the whole reason vertical agents exist:", "h"),
+     ("proprietary knowledge, tools, and APIs the base model will never have.", "b")])
 
 # ── closing takeaways ─────────────────────────────────────────────────────────
 s = prs.slides.add_slide(BLANK); bg(s, INK)
