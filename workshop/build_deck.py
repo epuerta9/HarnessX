@@ -215,6 +215,14 @@ content("Reproduce it",
      ("Gotcha we hit: LLAMA_API_KEY in your shell 401s all local inference — unset it.", "b"),
      ("Fork: github.com/epuerta9/HarnessX  (branch workshop/harness-evolution)", "b")])
 
+content("The technique is basic. The closed LOOP is the point.",
+    [("Reflect, tools, retries, policy hints — all well-known. We're NOT teaching those.", "h"),
+     ("The skill is the loop: run → READ THE TRACE → the trace names the failure → pick the matching", "b"),
+     ("lever → evolve → re-run → new trace → repeat. Driven by evidence, not guesswork.", "b"),
+     ("Every lever we pulled was chosen FROM a trace:", "h"),
+     ("telecom trace 'never called enable_roaming' → IRMA (0.50→0.75)", "b"),
+     ("GSM8K trace 'fast, wrong' → reflect (0.65→0.97) · KB trace 'hallucinated facts, no tool call' → kb_search (0→1.0)", "b")])
+
 content("Harness evolution IS reinforcement learning",
     [("The “operational mirror” — with the model FROZEN:", "h"),
      ("State = the HarnessConfig   ·   Action = pull one of the 4 levers", "b"),
@@ -271,12 +279,12 @@ content("The Action lever — genuine capability (can't → can)",
 s = prs.slides.add_slide(BLANK); bg(s, INK)
 tf = box(s, 0.9, 0.7, 11.5, 1.0); para(tf, "Takeaways", 36, WHITE, bold=True, first=True)
 body = box(s, 0.95, 2.0, 11.5, 5.0)
-tks = ["The harness, not just the model, determines REALIZED agent performance.",
-       "We improved a frozen model's benchmark score by evolving the harness alone (0.50 → 0.75).",
-       "Vertical agents need a STRONG BENCHMARK to evolve against — it's the reward signal.",
-       "Off-the-shelf model + off-the-shelf harness plateaus: nothing tells you which lever to move.",
-       "Agentic RL: a stronger model reads traces → picks the lever → re-runs → keeps what improves.",
-       "This is how you squeeze a cheap, frozen model to punch up on YOUR problem."]
+tks = ["The deliverable is the LOOP: run → read traces → pick the lever → evolve → re-run. Not the technique.",
+       "Every lever is chosen FROM a trace — the trace names the failure; you match a lever to it.",
+       "The harness, not the weights, sets REALIZED performance — proven across 3 levers, frozen model.",
+       "Vertical agents need a STRONG BENCHMARK to evolve against — it's the reward signal in the loop.",
+       "Off-the-shelf model + off-the-shelf harness plateaus: no trace signal → nothing to evolve on.",
+       "This is how you squeeze a cheap, frozen model to punch up on YOUR vertical."]
 for i, t in enumerate(tks):
     para(body, f"{i+1}.  {t}", 20, WHITE if i%2 else GREEN, bold=(i==0), first=(i==0), space=16)
 

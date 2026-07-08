@@ -117,10 +117,37 @@ attribution table (avg + marginal Δ vs vanilla). The **larger marginal** is the
 components with ~0 marginal are **inert — don't ship them** (leave-one-out). Attribution is statistical:
 that's why the paper uses pass^k and 100+ tasks. Reproducible for anyone with the servers up.
 
+## 7. (Capability, not crutch) Give the agent a tool it *needs*
+
+Some failures aren't reasoning or reliability — the model simply **lacks the knowledge**. It cannot know
+*your* private data; it's not in the weights. This is where the **Action lever** (a tool/skill) adds
+capability the model never had.
+
+Run it on a private company knowledge base (made-up, so the model can't have memorized it):
+```bash
+python workshop/action_demo/kb_agent.py --config vanilla    # no tool
+python workshop/action_demo/kb_agent.py --config action     # + kb_search tool
+```
+- **vanilla** → ~**0/12**. Watch it *hallucinate* every fact (confident, wrong prices and dates).
+- **action** → **12/12**. It calls `kb_search`, retrieves the fact, and answers.
+
+That gap — 0.00 → 1.00 — is **can't → can**: genuine new capability, not plumbing. Now **make it yours**:
+1. Add a fact to `action_demo/knowledge_base.json` + a matching question in `questions.json`, re-run.
+2. Replace `kb_search` with a **real** tool for *your* vertical — a DB query, an internal API, a document
+   retriever. Same pattern (`_KB_TOOL` definition + tool loop in `kb_agent.py`).
+
+**Lesson:** the model's weights are fixed; the tools you give it are the frontier. Proprietary knowledge,
+tools, and APIs the base model will never have — *that* is why vertical agents exist. (And note: we tried a
+**calculator** tool first — the 8B does 4-digit arithmetic by hand at 100%, so it was redundant. Don't add
+a tool the model doesn't need; add the one it *can't* live without.)
+
 ## What you should walk away having *felt*
 1. A frozen model's realized score is mostly **I/O discipline the scaffold guarantees** — you saw it fail,
    then saw a harness edit (no weight change) fix it.
 2. **You** drove the evolve loop with your own Claude — read trace, chose a lever, measured.
 3. The lever depends on your **vertical's bottleneck** — which is why one vanilla harness can't serve
-   every use case.
+   every use case. (Control = crutch that recovers latent ability; Instruction = reshapes reasoning;
+   **Action/tools = adds capability the model never had** — the frontier lever.)
 4. This is how you **squeeze a cheap/small model** to punch up on *your* problem.
+5. **Designing the benchmark is half the work** — it's the reward signal that tells you which lever to
+   move. No vertical benchmark → you're guessing.
